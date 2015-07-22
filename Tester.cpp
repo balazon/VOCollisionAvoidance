@@ -14,6 +14,7 @@ Tester::~Tester()
 }
 
 /*
+ * help for agent data
 Agent:
 	float x, y;
 	float vx, vy;

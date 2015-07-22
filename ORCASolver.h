@@ -19,8 +19,8 @@ struct Agent
 	int nearbyAgents[CA_MAXNEARBY];
 	float ux[CA_MAXNEARBY];
 	float uy[CA_MAXNEARBY];
-	//bool invalid;//when an agent is removed (eg. dies)
-	//constraints? time? (acceleration - paralelogram?)
+	
+	//constraints? time? (acceleration - paralelogram?) !!
 	
 	Agent();
 	Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref);
@@ -36,7 +36,7 @@ public:
 	
 	//void setAgentState(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref)
 	
-	//reference, because when an agent is removed, our id could change so that there are no gaps
+	//reference, because when an agent is removed, our id could change so that there are no gaps in array
 	Agent& GetAgent(int& id);
 	
 	//returns id of agent
