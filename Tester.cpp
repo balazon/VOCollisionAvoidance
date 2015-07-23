@@ -86,17 +86,7 @@ void Tester::RunTests()
 			int j = it->second;
 			Agent& a = solver.GetAgent(agentIds[i]);
 			Agent& b = solver.GetAgent(agentIds[j]);
-			for(int k = 0; k < CA_MAXNEARBY; k++)
-			{
-				if(a.nearbyAgents[k] == -1)
-				{
-					a.nearbyAgents[k] = agentIds[j];
-				}
-				if(b.nearbyAgents[k] == -1)
-				{
-					b.nearbyAgents[k] = agentIds[i];
-				}
-			}
+			SetAgentsNearby(agentIds[i], agentIds[j]);
 		}
 		solver.ComputeNewVelocities();
 		

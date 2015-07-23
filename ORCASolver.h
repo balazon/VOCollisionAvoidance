@@ -28,6 +28,11 @@ struct Agent
 	~Agent();
 };
 
+void ClearNeighbours(int i);
+void SetAgentsNearby(int i, int j);
+bool AreAgentsNeighbours(int i, int j);
+void SetUVector(int i, int j, float ux, float uy);
+
 class ORCASolver
 {
 public:
@@ -64,6 +69,6 @@ private:
 	
 	std::map<int, int> replacingIds;
 	
-	
+	void computeSmallestChangeVectors(int i, int j);
 };
 
