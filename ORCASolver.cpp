@@ -199,13 +199,13 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 	float ABx = b.x - a.x;
 	float ABy = b.y - a.y;
 	float R = a.r + b.r;
-	
+	float r = R / T;
 	float Ox = ABx / T;
 	float Oy = ABy / T;
 	float Px, Py;
 	float Qx, Qy;
 	
-	IntersectCircleCircle(ABx, ABy, R, Ox, Oy, R / T, Px, Py, Qx, Qy);
+	IntersectCircleCircle(ABx, ABy, R, Ox, Oy, r, Px, Py, Qx, Qy);
 	
 	//float constraints[3 * 4];
 	float Npx = - Py;
@@ -222,13 +222,14 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 		Nqx = -Nqx;
 		Nqy = -Nqy;
 	}
-	/*actually this G and H points are not needed
-	 * float Gx, Gy;
-	OrthogonalProjectionOfPointOnLine(Npx, Npy, 0.f, Ox, Oy, Gx, Gy);
-	float Hx, Hy;
-	OrthogonalProjectionOfPointOnLine(Nqx, Nqy, 0.f, Ox, Oy, Hx, Hy);*/
 	
-	if(Npx * a.vx + Npy * a.vy > 0 || Nqx * a.vx + Nqy * a.vy > 0)
+	//G, H points are not needed, but they are O's orthogonal projections to AP, and AQ (or the little circle's touching point)
+	//they are the 'g' and 'h' in variable names below: Aog, Aoh, ..
+	
+	float vrelx = a.vx - b.vx;
+	float vrely = a.vy - b.vy;
+	
+	if(Npx * vrelx + Npy * vrely > 0 || Nqx * vrelx + Nqy * vrely > 0)
 	{
 		SetUVector(i, j, 0.f, 0.f);
 		return;
@@ -254,7 +255,40 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 		Boh = - Boh;
 		Coh = - Coh;
 	}
+	float Sx, float Sy;
+	if(Aog * vrelx + Bog * vrely < Cog || Aoh * vrelx + Boh * vrely < Coh)
+	{
+		if(-ABy * vrelx + ABx * vrely > 0.f)
+		{
+			OrthogonalProjectionOfPointOnLine(Nqx, Nqy, 0.f, vrelx, vrely, Sx, Sy);
+		}
+		else
+		{
+			OrthogonalProjectionOfPointOnLine(Npx, Npy, 0.f, vrelx, vrely, Sx, Sy);
+		}
+	}
+	else if ((vrelx - Ox) * (vrelx - Ox) + (vrely - Oy) * (vrely - Oy) < r * r)
+	{
+		float x1,x2,y1,y2;
+		IntersectLineCircle(Oy - vrely, vrelx - Ox, (Oy - vrely) * Ox + (vrelx - Ox) * Oy, Ox, Oy, r, x1, y1, x2, y2);
+		if(Aog * x1 + Bog * y1 > Cog || Aoh * x1 + Boh * y1 > Coh)
+		{
+			Sx = x1;
+			Sy = y1;
+		}
+		else
+		{
+			Sx = x2;
+			Sy = y2;
+		}
+	}
+	else
+	{
+		SetUVector(i, j, 0.f, 0.f);
+		return;
+	}
 	
+	SetUVector(i, j, Sx - vrelx, Sy - vrely);
 }
 
 void ORCASolver::ComputeNewVelocities()
