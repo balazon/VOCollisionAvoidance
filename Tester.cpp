@@ -84,9 +84,9 @@ void Tester::RunTests()
 		{
 			int i = it->first;
 			int j = it->second;
-			Agent& a = solver.GetAgent(agentIds[i]);
-			Agent& b = solver.GetAgent(agentIds[j]);
-			SetAgentsNearby(agentIds[i], agentIds[j]);
+			//Agent& a = solver.GetAgent(agentIds[i]);
+			//Agent& b = solver.GetAgent(agentIds[j]);
+			solver.SetAgentsNearby(agentIds[i], agentIds[j]);
 		}
 		solver.ComputeNewVelocities();
 		

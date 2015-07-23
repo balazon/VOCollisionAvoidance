@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#define EPS (0.001)
+
 Agent::Agent()
 {
 	std::fill_n(nearbyAgents, CA_MAXNEARBY, -1);
@@ -15,12 +17,12 @@ Agent::~Agent()
 {
 }
 
-void ClearNeighbours(int i)
+void ORCASolver::ClearNeighbours(int i)
 {
 	Agent& a = agents[i];
-	std::fill_n(nearbyAgents, CA_MAXNEARBY, -1);
+	std::fill_n(a.nearbyAgents, CA_MAXNEARBY, -1);
 }
-void SetAgentsNearby(int i, int j)
+void ORCASolver::SetAgentsNearby(int i, int j)
 {
 	bool aset = false;
 	bool bset = false;
@@ -41,7 +43,7 @@ void SetAgentsNearby(int i, int j)
 	}
 }
 
-bool AreAgentsNeighbours(int i, int j)
+bool ORCASolver::AreAgentsNeighbours(int i, int j)
 {
 	Agent& a = agents[i];
 	Agent& b = agents[j];
@@ -56,7 +58,7 @@ bool AreAgentsNeighbours(int i, int j)
 }
 
 //for i agent (ux, uy), for j agent (-ux, -uy)
-void SetUVector(int i, int j, float ux, float uy)
+void ORCASolver::SetUVector(int i, int j, float ux, float uy)
 {
 	bool aset = false;
 	bool bset = false;
@@ -83,7 +85,7 @@ void SetUVector(int i, int j, float ux, float uy)
 	}
 }
 
-ORCASolver::ORCASolver() : num{0}, T{2.f}
+ORCASolver::ORCASolver() : T{2.f}, num{0}
 {
 }
 
@@ -107,7 +109,7 @@ Agent& ORCASolver::GetAgent(int& id)
 int ORCASolver::AddAgent()
 {
 	if(num == CA_MAXAGENTS)
-		return;
+		return -1;
 	
 	std::fill_n(agents[num].nearbyAgents, CA_MAXNEARBY, -1);
 	return num++;
@@ -255,7 +257,7 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 		Boh = - Boh;
 		Coh = - Coh;
 	}
-	float Sx, float Sy;
+	float Sx, Sy;
 	if(Aog * vrelx + Bog * vrely < Cog || Aoh * vrelx + Boh * vrely < Coh)
 	{
 		if(-ABy * vrelx + ABx * vrely > 0.f)
@@ -302,8 +304,32 @@ void ORCASolver::ComputeNewVelocities()
 		{
 			if(AreAgentsNeighbours(i, j))
 			{
-				computeSmallestChangeVectors(int i, int j);
+				computeSmallestChangeVectors(i, j);
 			}
 		}
+		Agent& a = agents[i];
+		solver.Reset();
+		solver.SetDestination(a.vx_pref, a.vy_pref);
+		for(int j = 0; j < CA_MAXNEARBY; j++)
+		{
+			float ux = a.ux[j];
+			float uy = a.uy[j];
+			if(a.nearbyAgents[j] != -1 && (ux != 0.f || uy != 0.f))
+			{
+				float A = ux;
+				float B = uy;
+				float C = A * (a.vx + ux * .5f) + B * (a.vy + uy * .5f);
+				if(A * a.vx + B * a.vy < C)
+				{
+					A = -A;
+					B = -B;
+					C = -C;
+				}
+				solver.AddConstraint(A, B, C);
+			}
+		}
+		
+		solver.Solve(a.vx_new, a.vy_new);
+		//if solver fails (solver.HasSolution is false) - what to do?
 	}
 }

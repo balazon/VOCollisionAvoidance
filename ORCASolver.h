@@ -28,16 +28,18 @@ struct Agent
 	~Agent();
 };
 
-void ClearNeighbours(int i);
-void SetAgentsNearby(int i, int j);
-bool AreAgentsNeighbours(int i, int j);
-void SetUVector(int i, int j, float ux, float uy);
+
 
 class ORCASolver
 {
 public:
 	ORCASolver();
 	~ORCASolver();
+	
+	void ClearNeighbours(int i);
+	void SetAgentsNearby(int i, int j);
+	bool AreAgentsNeighbours(int i, int j);
+	void SetUVector(int i, int j, float ux, float uy);
 	
 	//void setAgentState(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref)
 	
