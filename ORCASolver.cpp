@@ -318,6 +318,7 @@ void ORCASolver::ComputeNewVelocities()
 			{
 				float A = ux;
 				float B = uy;
+				//V_a + u / 2, direction is u
 				float C = A * (a.vx + ux * .5f) + B * (a.vy + uy * .5f);
 				if(A * a.vx + B * a.vy < C)
 				{
