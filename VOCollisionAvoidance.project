@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="VOCollisionAvoidance" InternalType="Console">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
   "name": "Debug",
@@ -13,9 +16,6 @@
   "parentProject": ""
  }]]]>
     </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
-    </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
@@ -25,6 +25,8 @@
     <File Name="Tester.cpp"/>
     <File Name="ORCASolver.h"/>
     <File Name="ORCASolver.cpp"/>
+    <File Name="CPLPSolver.h"/>
+    <File Name="CPLPSolver.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

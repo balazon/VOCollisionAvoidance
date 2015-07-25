@@ -47,7 +47,7 @@ void Tester::InitTests()
 	AddTest(t1);
 	
 	//test 2
-	Agent a2 = Agent{0.f, 0.f, 5.5f, 3.f, 2.f, 5.5f, 3.f};
+	Agent a2 = Agent{0.f, 0.f, 9.f, 4.f, 2.f, 9.f, 4.f};
 	Agent b2 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f};
 	neighbours.clear();
 	neighbours[0] = 1;
@@ -79,6 +79,7 @@ void Tester::RunTests()
 		for(int i = 0; i < t.agents.size(); i++)
 		{
 			agentIds.push_back(solver.AddAgent());
+			solver.GetAgent(agentIds[i]) = t.agents[i];
 		}
 		for(auto it = t.neighbours.begin(); it != t.neighbours.end(); it++)
 		{

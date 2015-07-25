@@ -1,16 +1,20 @@
 #include "ORCASolver.h"
 
 #include <cmath>
-
+#include <utility>
 #define EPS (0.001)
 
-Agent::Agent()
+#include "CPLPSolver.h"
+
+CPLPSolver solver;
+
+Agent::Agent() : Agent{0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}
 {
-	std::fill_n(nearbyAgents, CA_MAXNEARBY, -1);
 }
 
 Agent::Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref) : x{x}, y{y}, vx{vx}, vy{vy}, r{r}, vx_pref{vx_pref}, vy_pref{vy_pref}
 {
+	std::fill_n(nearbyAgents, CA_MAXNEARBY, -1);
 }
 
 Agent::~Agent()
@@ -164,7 +168,7 @@ bool IntersectLineCircle(float A, float B, float C, float u, float v, float r, f
 	}
 	float a = A * A + B * B;
 	float b = - 2.f * C * A - 2.f * u * B * B + 2.f * v * A * B;
-	float c = C * C - 2.f * v * C * B - r * r * B * B;
+	float c = C * C - 2.f * v * C * B + (u * u + v * v - r * r) * B * B;
 	bool solvable = QuadraticEquation(a, b, c, x1, x2);
 	if(!solvable)
 	{
@@ -182,7 +186,7 @@ bool IntersectLineCircle(float A, float B, float C, float u, float v, float r, f
 
 bool IntersectCircleCircle(float u1, float v1, float r1, float u2, float v2, float r2, float& x1, float& y1, float& x2, float& y2)
 {
-	return IntersectLineCircle(u1 - u2, v1 - v2, (r2 + r1) * (r2 - r1), u1, v1, r1, x1, y1, x2, y2);
+	return IntersectLineCircle(u1 - u2, v1 - v2, .5f * ((r2 + r1) * (r2 - r1) + (u1 + u2) * (u1 - u2) + (v1 + v2) * (v1 - v2)), u1, v1, r1, x1, y1, x2, y2);
 }
 
 //line: Ax + By = C
@@ -207,7 +211,16 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 	float Px, Py;
 	float Qx, Qy;
 	
-	IntersectCircleCircle(ABx, ABy, R, Ox, Oy, r, Px, Py, Qx, Qy);
+	//bool IntersectCircleCircle(float u1, float v1, float r1, float u2, float v2, float r2, float& x1, float& y1, float& x2, float& y2)
+	
+	
+	IntersectCircleCircle(ABx, ABy, R, Ox, Oy, sqrtf(Ox * Ox + Oy * Oy), Px, Py, Qx, Qy);
+	
+	if(-ABy * Px + ABx * Py > 0.f)
+	{
+		std::swap(Px, Qx);
+		std::swap(Py, Qy);
+	}
 	
 	//float constraints[3 * 4];
 	float Npx = - Py;

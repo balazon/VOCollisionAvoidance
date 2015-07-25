@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=valentin
-Date                   :=07/23/15
+Date                   :=07/25/15
 CodeLitePath           :="C:\Program Files\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -62,7 +62,7 @@ AS       := as
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) 
 
 
 
@@ -112,6 +112,14 @@ $(IntermediateDirectory)/ORCASolver.cpp$(DependSuffix): ORCASolver.cpp
 
 $(IntermediateDirectory)/ORCASolver.cpp$(PreprocessSuffix): ORCASolver.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ORCASolver.cpp$(PreprocessSuffix) "ORCASolver.cpp"
+
+$(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix): CPLPSolver.cpp $(IntermediateDirectory)/CPLPSolver.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/codelitewp/cppwp/VOCollisionAvoidance/CPLPSolver.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/CPLPSolver.cpp$(DependSuffix): CPLPSolver.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/CPLPSolver.cpp$(DependSuffix) -MM "CPLPSolver.cpp"
+
+$(IntermediateDirectory)/CPLPSolver.cpp$(PreprocessSuffix): CPLPSolver.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/CPLPSolver.cpp$(PreprocessSuffix) "CPLPSolver.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
