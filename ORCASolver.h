@@ -20,10 +20,12 @@ struct Agent
 	float ux[CA_MAXNEARBY];
 	float uy[CA_MAXNEARBY];
 	
-	//constraints? time? (acceleration - paralelogram?) !!
+	float maxVelocityMagnitude;
+	float maxAccMagnitude;
+	
 	
 	Agent();
-	Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref);
+	Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref, float maxVelocityMagnitude, float maxAccMagnitude);
 	
 	~Agent();
 };

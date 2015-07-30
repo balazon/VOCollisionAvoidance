@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=valentin
-Date                   :=07/25/15
+Date                   :=07/30/15
 CodeLitePath           :="C:\Program Files\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -62,7 +62,7 @@ AS       := as
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix) 
 
 
 
@@ -120,6 +120,14 @@ $(IntermediateDirectory)/CPLPSolver.cpp$(DependSuffix): CPLPSolver.cpp
 
 $(IntermediateDirectory)/CPLPSolver.cpp$(PreprocessSuffix): CPLPSolver.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/CPLPSolver.cpp$(PreprocessSuffix) "CPLPSolver.cpp"
+
+$(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix): MathUtils.cpp $(IntermediateDirectory)/MathUtils.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/codelitewp/cppwp/VOCollisionAvoidance/MathUtils.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MathUtils.cpp$(DependSuffix): MathUtils.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MathUtils.cpp$(DependSuffix) -MM "MathUtils.cpp"
+
+$(IntermediateDirectory)/MathUtils.cpp$(PreprocessSuffix): MathUtils.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MathUtils.cpp$(PreprocessSuffix) "MathUtils.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

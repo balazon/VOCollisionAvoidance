@@ -1,5 +1,8 @@
-Debug/ORCASolver.cpp.o: ORCASolver.cpp ORCASolver.h CPLPSolver.h
+Debug/ORCASolver.cpp.o: ORCASolver.cpp ORCASolver.h MathUtils.h \
+ CPLPSolver.h
 
 ORCASolver.h:
+
+MathUtils.h:
 
 CPLPSolver.h:

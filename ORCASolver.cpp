@@ -1,18 +1,20 @@
 #include "ORCASolver.h"
 
+#include "MathUtils.h"
 #include <cmath>
 #include <utility>
-#define EPS (0.001)
+
 
 #include "CPLPSolver.h"
 
 CPLPSolver solver;
 
-Agent::Agent() : Agent{0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}
+Agent::Agent() : Agent{0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}
 {
 }
 
-Agent::Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref) : x{x}, y{y}, vx{vx}, vy{vy}, r{r}, vx_pref{vx_pref}, vy_pref{vy_pref}
+Agent::Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref, float maxVelocityMagnitude, float maxAccMagnitude)
+ : x{x}, y{y}, vx{vx}, vy{vy}, r{r}, vx_pref{vx_pref}, vy_pref{vy_pref}, maxVelocityMagnitude{maxVelocityMagnitude}, maxAccMagnitude{maxAccMagnitude}
 {
 	std::fill_n(nearbyAgents, CA_MAXNEARBY, -1);
 }
@@ -136,68 +138,6 @@ void ORCASolver::SetParameters(float T)
 }
 
 
-//Math stuff here
-
-bool QuadraticEquation(float a, float b, float c, float& x1, float& x2)
-{
-	float D;
-	if(fabs(a) < EPS)
-	{
-		x1 = x2 = - c / b;
-		return true;
-	}
-	if((D = b * b - 4 * a * c) < 0)
-	{
-		return false;
-	}
-	float denom_reciproc = .5f / a;
-	float sqrtD = sqrtf(D);
-	x1 = (- b + sqrtD) * denom_reciproc;
-	x2 = (- b - sqrtD) * denom_reciproc;
-	return true;
-}
-
-bool IntersectLineCircle(float A, float B, float C, float u, float v, float r, float& x1, float& y1, float& x2, float& y2)
-{
-	bool swapped = false;
-	if(fabs(B) < EPS)
-	{
-		swapped = true;
-		std::swap(u, v);
-		std::swap(A, B);
-	}
-	float a = A * A + B * B;
-	float b = - 2.f * C * A - 2.f * u * B * B + 2.f * v * A * B;
-	float c = C * C - 2.f * v * C * B + (u * u + v * v - r * r) * B * B;
-	bool solvable = QuadraticEquation(a, b, c, x1, x2);
-	if(!solvable)
-	{
-		return false;
-	}
-	y1 = (C - A * x1) / B;
-	y2 = (C - A * x2) / B;
-	if(swapped)
-	{
-		std::swap(x1, y1);
-		std::swap(x2, y2);
-	}
-	return true;
-}
-
-bool IntersectCircleCircle(float u1, float v1, float r1, float u2, float v2, float r2, float& x1, float& y1, float& x2, float& y2)
-{
-	return IntersectLineCircle(u1 - u2, v1 - v2, .5f * ((r2 + r1) * (r2 - r1) + (u1 + u2) * (u1 - u2) + (v1 + v2) * (v1 - v2)), u1, v1, r1, x1, y1, x2, y2);
-}
-
-//line: Ax + By = C
-//point: (tx, ty)
-void OrthogonalProjectionOfPointOnLine(float A, float B, float C, float tx, float ty, float& resX, float& resY)
-{
-	float denominator = A * A + B * B;
-	resX = (B * B * tx - A * B * ty + A * C) / denominator;
-	resY = (A * A * ty - A * B * tx + B * C) / denominator;
-}
-
 void ORCASolver::computeSmallestChangeVectors(int i, int j)
 {
 	Agent& a = agents[i];
@@ -284,18 +224,7 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 	}
 	else if ((vrelx - Ox) * (vrelx - Ox) + (vrely - Oy) * (vrely - Oy) < r * r)
 	{
-		float x1,x2,y1,y2;
-		IntersectLineCircle(Oy - vrely, vrelx - Ox, (Oy - vrely) * Ox + (vrelx - Ox) * Oy, Ox, Oy, r, x1, y1, x2, y2);
-		if(Aog * x1 + Bog * y1 > Cog || Aoh * x1 + Boh * y1 > Coh)
-		{
-			Sx = x1;
-			Sy = y1;
-		}
-		else
-		{
-			Sx = x2;
-			Sy = y2;
-		}
+		OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
 	}
 	else
 	{
@@ -339,9 +268,12 @@ void ORCASolver::ComputeNewVelocities()
 					B = -B;
 					C = -C;
 				}
-				solver.AddConstraint(A, B, C);
+				solver.AddConstraintLinear(A, B, C);
 			}
 		}
+		
+		solver.AddConstraintCircle(a.vx, a.vy, a.maxAccMagnitude);
+		solver.AddConstraintCircle(0.f, 0.f, a.maxVelocityMagnitude);
 		
 		solver.Solve(a.vx_new, a.vy_new);
 		//if solver fails (solver.HasSolution is false) - what to do?

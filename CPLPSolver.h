@@ -13,7 +13,9 @@ public:
 	void Reset();
 	
 	//Ax + By < C
-	void AddConstraint(float A, float B, float C);
+	void AddConstraintLinear(float A, float B, float C);
+	
+	void AddConstraintCircle(float U, float V, float R);
 	
 	//Destination coordinates
 	void SetDestination(float u, float v);
@@ -22,16 +24,29 @@ public:
 	void Solve(float& resX, float& resY);
 	
 private:
+	//destination coordinates
 	float u, v;
+	
+	enum ConstraintType {CT_LINEAR, CT_CIRCLE};
 	
 	//3 elements define a constraint
 	std::vector<float> constraints;
 	
+	std::vector<ConstraintType> constraintTypes;
 	
 	bool feasible;
 	
-	bool pointSatisfiesConstraints(float tx, float ty, const std::unordered_set<int>& filterIndexes = std::unordered_set<int>{});
+	std::vector<int> order;
 	
+	std::unordered_set<int> filter;
+	
+	//nth constraint in array (not in the random order)
+	bool pointSatisfiesConstraint(float tx, float ty, int n);
+	
+	//with regard to random order
+	bool pointSatisfiesConstraints(float tx, float ty, int n);
+	
+	void createRandomOrder();
 };
 
 

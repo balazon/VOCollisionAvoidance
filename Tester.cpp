@@ -26,6 +26,8 @@ Agent:
 	int nearbyAgents[MAXNEARBY];
 	float ux[MAXNEARBY];
 	float uy[MAXNEARBY];
+	float maxVelocitySqrMagnitude;
+	float maxAccSqrMagnitude;
 */
 void Tester::InitTests()
 {
@@ -33,8 +35,8 @@ void Tester::InitTests()
 	std::map<int, int> neighbours;
 	
 	//test 1
-	Agent a1 = Agent{0.f, 0.f, 5.5f, 3.f, 2.f, 5.5f, 3.f};
-	Agent b1 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f};
+	Agent a1 = Agent{0.f, 0.f, 5.5f, 3.f, 2.f, 5.5f, 3.f, 1000.f, 100.f};
+	Agent b1 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	//first agent can see the second (but it is bidirectional for now)
 	neighbours.clear();
 	neighbours[0] = 1;
@@ -47,8 +49,8 @@ void Tester::InitTests()
 	AddTest(t1);
 	
 	//test 2
-	Agent a2 = Agent{0.f, 0.f, 9.f, 4.f, 2.f, 9.f, 4.f};
-	Agent b2 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f};
+	Agent a2 = Agent{0.f, 0.f, 9.f, 4.f, 2.f, 9.f, 4.f, 1000.f, 100.f};
+	Agent b2 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	neighbours.clear();
 	neighbours[0] = 1;
 	
@@ -57,6 +59,19 @@ void Tester::InitTests()
 	testAgents.push_back(b2);
 	Test t2{testAgents, neighbours, 0, 9.f, 2.f};
 	AddTest(t2);
+	
+	//test 3
+	Agent a3 = Agent{0.f, 0.f, 0.75f, -3.f, 2.f, 0.f, -6.f, 5.f, 100.f};
+	Agent b3 = Agent{14.f, 10.f, -4.75f, -6.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
+	neighbours.clear();
+	neighbours[0] = 1;
+	
+	testAgents.clear();
+	testAgents.push_back(a3);
+	testAgents.push_back(b3);
+	
+	Test t3{testAgents, neighbours, 0, 0.f, -5.f};
+	AddTest(t3);
 }
 
 void Tester::AddTest(Test t)

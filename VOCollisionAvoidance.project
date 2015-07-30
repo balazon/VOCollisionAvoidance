@@ -27,6 +27,8 @@
     <File Name="ORCASolver.cpp"/>
     <File Name="CPLPSolver.h"/>
     <File Name="CPLPSolver.cpp"/>
+    <File Name="MathUtils.h"/>
+    <File Name="MathUtils.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
