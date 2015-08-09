@@ -276,6 +276,5 @@ void ORCASolver::ComputeNewVelocities()
 		solver.AddConstraintCircle(0.f, 0.f, a.maxVelocityMagnitude);
 		
 		solver.Solve(a.vx_new, a.vy_new);
-		//if solver fails (solver.HasSolution is false) - what to do?
 	}
 }

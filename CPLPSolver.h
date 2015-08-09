@@ -23,6 +23,8 @@ public:
 	bool HasSolution();
 	void Solve(float& resX, float& resY);
 	
+	void SolveSafest(float& resX, float& resY);
+	
 private:
 	//destination coordinates
 	float u, v;
@@ -41,12 +43,22 @@ private:
 	std::unordered_set<int> filter;
 	
 	//nth constraint in array (not in the random order)
-	bool pointSatisfiesConstraint(float tx, float ty, int n);
+	bool pointSatisfiesConstraint(float tx, float ty, int n, float d = 0.f);
 	
 	//with regard to random order
-	bool pointSatisfiesConstraints(float tx, float ty, int n);
+	bool pointSatisfiesConstraints(float tx, float ty, int n, float d = 0.f, bool onlyCircles = false);
 	
 	void createRandomOrder();
+	
+	void normalizeLinearConstraints();
+	
+	//the max d value for linear constraints
+	float getPointsMaxDistance(float x, float y);
+	
+	//first n constraints are regarded (random), (x,y),
+	// point is checked if it's inside circles and 
+	// if the max d distance from lines is smaller than current best solution's
+	void updatePointIfBetter(float x, float y, int n, float& resX, float& resY, float& d);
 };
 
 
