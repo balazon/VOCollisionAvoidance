@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=valentin
-Date                   :=08/23/15
+Date                   :=10/14/15
 CodeLitePath           :="C:\Program Files\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -62,7 +62,7 @@ AS       := as
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Tester.cpp$(ObjectSuffix) $(IntermediateDirectory)/ORCASolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/CPLPSolver.cpp$(ObjectSuffix) $(IntermediateDirectory)/MathUtils.cpp$(ObjectSuffix) $(IntermediateDirectory)/SVGExporter.cpp$(ObjectSuffix) 
 
 
 
@@ -128,6 +128,14 @@ $(IntermediateDirectory)/MathUtils.cpp$(DependSuffix): MathUtils.cpp
 
 $(IntermediateDirectory)/MathUtils.cpp$(PreprocessSuffix): MathUtils.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MathUtils.cpp$(PreprocessSuffix) "MathUtils.cpp"
+
+$(IntermediateDirectory)/SVGExporter.cpp$(ObjectSuffix): SVGExporter.cpp $(IntermediateDirectory)/SVGExporter.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/codelitewp/cppwp/VOCollisionAvoidance/SVGExporter.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SVGExporter.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SVGExporter.cpp$(DependSuffix): SVGExporter.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SVGExporter.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SVGExporter.cpp$(DependSuffix) -MM "SVGExporter.cpp"
+
+$(IntermediateDirectory)/SVGExporter.cpp$(PreprocessSuffix): SVGExporter.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SVGExporter.cpp$(PreprocessSuffix) "SVGExporter.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

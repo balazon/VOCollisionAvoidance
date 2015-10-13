@@ -40,6 +40,7 @@ void Tester::InitTests()
 	//first agent can see the second (but it is bidirectional for now)
 	neighbours.clear();
 	neighbours[0] = 1;
+	neighbours[1] = 0;
 	
 	testAgents.clear();
 	testAgents.push_back(a1);
@@ -53,6 +54,7 @@ void Tester::InitTests()
 	Agent b2 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	neighbours.clear();
 	neighbours[0] = 1;
+	neighbours[1] = 0;
 	
 	testAgents.clear();
 	testAgents.push_back(a2);
@@ -65,6 +67,7 @@ void Tester::InitTests()
 	Agent b3 = Agent{14.f, 10.f, -4.75f, -6.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	neighbours.clear();
 	neighbours[0] = 1;
+	neighbours[1] = 0;
 	
 	testAgents.clear();
 	testAgents.push_back(a3);
@@ -76,18 +79,23 @@ void Tester::InitTests()
 	//continuous tests:
 	std::vector<float> DX, DY;
 	//test 4 - 2 agents cross each other's path
-	Agent a4 = Agent{100.f, 5.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 10.f};
-	Agent b4 = Agent{-100.f, 0.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 10.f};
+	Agent a4 = Agent{100.f, 5.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 200.f};
+	Agent b4 = Agent{-100.f, 0.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 200.f};
 	neighbours.clear();
 	neighbours[0] = 1;
+	neighbours[1] = 0;
 	testAgents.clear();
 	testAgents.push_back(a4);
 	testAgents.push_back(b4);
 	DX.clear();
 	DX.push_back(-100.f); DY.push_back(5.f);
 	DX.push_back(100.f); DY.push_back(0.f);
-	ContinuousTest ct4{testAgents, neighbours, DX, DY, 450.f, 0};
-	AddTest(ct4);
+	ContinuousTest ct4{testAgents, neighbours, DX, DY, 4.f, 0};
+	//AddTest(ct4);
+	
+	
+	
+	
 }
 
 void Tester::AddTest(Test t)
@@ -171,6 +179,7 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 	
 	float dt = 0.015f;
 	
+	
 	std::vector<int> agentIds;
 	for(int i = 0; i < t.agents.size(); i++)
 	{
@@ -194,7 +203,6 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 			a.vy_pref = toDestY * 100.f;
 		}
 		
-		a.maxVelocityMagnitude = a.maxVelocityMagnitude * dt;
 		a.maxAccMagnitude = a.maxAccMagnitude * dt;
 		
 		solver.GetAgent(agentIds[i]) = a;
@@ -208,12 +216,24 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 		solver.SetAgentsNearby(agentIds[i], agentIds[j]);
 	}
 	
+	float debugInterval = 0.1f;
+	float debugTimer = 0;
 	
 	float timeGiven = t.timeGiven;
 	while(timeGiven > 0)
 	{
 		timeGiven -= dt;
 		
+		debugTimer -= dt;
+		if(debugTimer < 0)
+		{
+			debugTimer = debugInterval;
+			for(int i = 0; i < t.agents.size(); i++)
+			{
+				Agent& a = solver.GetAgent(i);
+				std::cout << "Agent " << i << " x: " << a.x << ", y: " << a.y << " vx: " << a.vx << ", vy: " << a.vy << "\n";
+			}
+		}
 		
 		
 		solver.ComputeNewVelocities();

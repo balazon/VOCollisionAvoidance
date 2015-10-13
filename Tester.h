@@ -2,6 +2,7 @@
 
 #include "ORCASolver.h"
 
+#include <map>
 #include <vector>
 
 struct Test

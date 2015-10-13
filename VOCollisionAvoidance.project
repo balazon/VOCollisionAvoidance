@@ -29,6 +29,8 @@
     <File Name="CPLPSolver.cpp"/>
     <File Name="MathUtils.h"/>
     <File Name="MathUtils.cpp"/>
+    <File Name="SVGExporter.h"/>
+    <File Name="SVGExporter.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

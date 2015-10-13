@@ -1,11 +1,17 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
+#define RVOTEST_API 
+
 #include <vector>
-#include <map>
 
 #define CA_MAXAGENTS (400)
 
-#define CA_MAXNEARBY (5)
+#define CA_MAXNEARBY (6)
+
+#define CA_TAU (2.f)
+
 
 struct Agent
 {
@@ -19,60 +25,76 @@ struct Agent
 	int nearbyAgents[CA_MAXNEARBY];
 	float ux[CA_MAXNEARBY];
 	float uy[CA_MAXNEARBY];
-	
+	bool uConstraintReversed[CA_MAXNEARBY];
+
+	int nearbyCount;
+
 	float maxVelocityMagnitude;
 	float maxAccMagnitude;
-	
-	
+
+
 	Agent();
 	Agent(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref, float maxVelocityMagnitude, float maxAccMagnitude);
-	
+
 	~Agent();
 };
 
 
-
-class ORCASolver
+/**
+ * 
+ */
+class RVOTEST_API ORCASolver
 {
 public:
 	ORCASolver();
 	~ORCASolver();
-	
+
 	void ClearNeighbours(int i);
 	void SetAgentsNearby(int i, int j);
 	bool AreAgentsNeighbours(int i, int j);
-	void SetUVector(int i, int j, float ux, float uy);
-	
+	void SetUVector(int i, int j, float ux, float uy, bool reversed = false);
+
 	//void setAgentState(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref)
+
 	
-	//reference, because when an agent is removed, our id could change so that there are no gaps in array
-	Agent& GetAgent(int& id);
+	Agent& GetAgent(int id);
 	
+
 	//returns id of agent
 	int AddAgent();
-	void RemoveAgent(int id);
+	//returns the id of the agent who gets the removed agent's id or -1 if nobody gets it
+	int RemoveAgent(int id);
 	void ClearAgents();
-	
+
 	void SetParameters(float T);
-	
+
 	//new velocities which hopefully help avoid collisions
 	void ComputeNewVelocities();
 	
+	void SetDebugging(bool on);
 private:
 
 	//used for calculating the limited VO (t < T)
 	float T;
-	
+
 	int num;
 	Agent agents[CA_MAXAGENTS];
-	
+
 	//void computeORCAConstraint(float Ax, float Ay, float Bx, float By, float Vax, float Vay, float Vbx, float Vby, float Ra, float Rb)
-	
+
 	//compute u vector: u for A agent with respect to B, and -u for agent B with respect to A
 	//void computeSmallestChangeRequired
+
 	
-	std::map<int, int> replacingIds;
-	
+
 	void computeSmallestChangeVectors(int i, int j);
+
+	
 };
+
+
+
+
+
+
 
