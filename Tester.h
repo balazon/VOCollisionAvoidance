@@ -2,13 +2,14 @@
 
 #include "ORCASolver.h"
 
-#include <map>
+#include "SVGExporter.h"
+
 #include <vector>
 
 struct Test
 {
 	std::vector<Agent> agents;
-	std::map<int, int> neighbours;
+	std::vector<std::pair<int, int>> neighbours;
 	int testedAgent;
 	float Vnewx;
 	float Vnewy;
@@ -19,7 +20,7 @@ struct Test
 struct ContinuousTest
 {
 	std::vector<Agent> agents;
-	std::map<int, int> neighbours;
+	std::vector<std::pair<int, int>> neighbours;
 	
 	std::vector<float> DestX;
 	std::vector<float> DestY;
@@ -37,6 +38,8 @@ public:
 	void InitTests();
 	void AddTest(Test t);
 	void RunTests();
+	
+	bool RunTest(Test t);
 	
 	void AddTest(ContinuousTest t);
 	

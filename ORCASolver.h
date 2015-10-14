@@ -59,6 +59,7 @@ public:
 	
 	Agent& GetAgent(int id);
 	
+	
 
 	//returns id of agent
 	int AddAgent();

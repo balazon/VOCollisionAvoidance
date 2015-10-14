@@ -32,15 +32,15 @@ Agent:
 void Tester::InitTests()
 {
 	std::vector<Agent> testAgents;
-	std::map<int, int> neighbours;
+	std::vector<std::pair<int, int>> neighbours;
 	
 	//test 1
 	Agent a1 = Agent{0.f, 0.f, 5.5f, 3.f, 2.f, 5.5f, 3.f, 1000.f, 100.f};
 	Agent b1 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	//first agent can see the second (but it is bidirectional for now)
 	neighbours.clear();
-	neighbours[0] = 1;
-	neighbours[1] = 0;
+	neighbours.push_back({0, 1});
+	
 	
 	testAgents.clear();
 	testAgents.push_back(a1);
@@ -53,8 +53,7 @@ void Tester::InitTests()
 	Agent a2 = Agent{0.f, 0.f, 9.f, 4.f, 2.f, 9.f, 4.f, 1000.f, 100.f};
 	Agent b2 = Agent{14.f, 10.f, 0.f, 0.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	neighbours.clear();
-	neighbours[0] = 1;
-	neighbours[1] = 0;
+	neighbours.push_back({0, 1});
 	
 	testAgents.clear();
 	testAgents.push_back(a2);
@@ -66,8 +65,7 @@ void Tester::InitTests()
 	Agent a3 = Agent{0.f, 0.f, 0.75f, -3.f, 2.f, 0.f, -6.f, 5.f, 100.f};
 	Agent b3 = Agent{14.f, 10.f, -4.75f, -6.f, 8.f, 0.f, 0.f, 1000.f, 100.f};
 	neighbours.clear();
-	neighbours[0] = 1;
-	neighbours[1] = 0;
+	neighbours.push_back({0, 1});
 	
 	testAgents.clear();
 	testAgents.push_back(a3);
@@ -82,8 +80,7 @@ void Tester::InitTests()
 	Agent a4 = Agent{100.f, 5.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 200.f};
 	Agent b4 = Agent{-100.f, 0.f, 0.f, 0.f, 20.f, 0.f, 0.f, 100.f, 200.f};
 	neighbours.clear();
-	neighbours[0] = 1;
-	neighbours[1] = 0;
+	neighbours.push_back({0, 1});
 	testAgents.clear();
 	testAgents.push_back(a4);
 	testAgents.push_back(b4);
@@ -94,6 +91,37 @@ void Tester::InitTests()
 	//AddTest(ct4);
 	
 	
+	//svgexport
+	Agent sa1 = Agent(2.f, 2.f, 2.f, 1.f, 1.f, 2.f, 1.f, 3.f, 0.2f);
+	Agent sa2 = Agent(8.f, 3.f, -1.f, .5f, 1.f, -2.f, 1.f, 3.f, 0.2f);
+	Agent sa3 = Agent(3.f, 9.f, 1.f, -2.f, 1.f, 1.f, -2.f, 3.f, 0.2f);
+	Agent sa4 = Agent(5.f, 5.f, 1.f, 1.f, 1.f, 2.f, 1.f, 3.f, 0.2f);
+	
+	testAgents.clear();
+	testAgents.push_back(sa1);
+	testAgents.push_back(sa2);
+	testAgents.push_back(sa3);
+	testAgents.push_back(sa4);
+	
+	neighbours.clear();
+	for(int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 4; j++)
+		{
+			if(i == j)
+			{
+				continue;
+			}
+				
+			neighbours.push_back({i, j});
+		}
+	}
+	
+	Test st{testAgents, neighbours, 3, 0.f, 0.f};
+	
+	RunTest(st);
+	SVGExporter::writeUnits("test.svg", &solver, 4);
+	SVGExporter::writeUnitORCAs("unitORCA.svg", &solver, 4, 3);
 	
 	
 }
@@ -113,28 +141,9 @@ void Tester::RunTests()
 	{
 		testIndex++;
 		
-		solver.ClearAgents();
-		std::vector<int> agentIds;
-		for(int i = 0; i < t.agents.size(); i++)
-		{
-			agentIds.push_back(solver.AddAgent());
-			solver.GetAgent(agentIds[i]) = t.agents[i];
-		}
-		for(auto it = t.neighbours.begin(); it != t.neighbours.end(); it++)
-		{
-			int i = it->first;
-			int j = it->second;
-			//Agent& a = solver.GetAgent(agentIds[i]);
-			//Agent& b = solver.GetAgent(agentIds[j]);
-			solver.SetAgentsNearby(agentIds[i], agentIds[j]);
-		}
-		solver.ComputeNewVelocities();
-		
-		Agent testedAgent = solver.GetAgent(agentIds[t.testedAgent]);
-		
 		std::cout << "Test " << testIndex << ": " << t.Vnewx << "," << t.Vnewy << "\n";
-		std::cout << "Solver res: " << testedAgent.vx_new  << "," << testedAgent.vy_new << "\n\n";
-		if(fabs(testedAgent.vx_new - t.Vnewx) < EPS && fabs(testedAgent.vy_new - t.Vnewy) < EPS)
+		
+		if(RunTest(t))
 		{
 			passedTest++;
 		}
@@ -167,6 +176,39 @@ void Tester::RunTests()
 	std::cout << std::endl;
 
 }
+
+
+bool Tester::RunTest(Test t)
+{
+	solver.ClearAgents();
+	std::vector<int> agentIds;
+	for(int i = 0; i < t.agents.size(); i++)
+	{
+		agentIds.push_back(solver.AddAgent());
+		solver.GetAgent(agentIds[i]) = t.agents[i];
+	}
+	for(auto it = t.neighbours.begin(); it != t.neighbours.end(); it++)
+	{
+		int i = it->first;
+		int j = it->second;
+		//Agent& a = solver.GetAgent(agentIds[i]);
+		//Agent& b = solver.GetAgent(agentIds[j]);
+		solver.SetAgentsNearby(agentIds[i], agentIds[j]);
+		
+	}
+	solver.ComputeNewVelocities();
+	
+	Agent testedAgent = solver.GetAgent(agentIds[t.testedAgent]);
+	
+	
+	std::cout << "Solver res: " << testedAgent.vx_new  << "," << testedAgent.vy_new << "\n\n";
+	if(fabs(testedAgent.vx_new - t.Vnewx) < EPS && fabs(testedAgent.vy_new - t.Vnewy) < EPS)
+	{
+		return true;
+	}
+	return false;
+}
+
 
 void Tester::AddTest(ContinuousTest t)
 {
