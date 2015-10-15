@@ -68,35 +68,18 @@ bool ORCASolver::AreAgentsNeighbours(int i, int j)
 	return false;
 }
 
-//for i agent (ux, uy), for j agent (-ux, -uy)
-void ORCASolver::SetUVector(int i, int j, float ux, float uy, bool reversed)
+
+
+void ORCASolver::SetORCAConstraint(Agent& a, int j, float A, float B, float C)
 {
-	bool aset = false;
-	bool bset = false;
-	Agent& a = agents[i];
-	Agent& b = agents[j];
-	int aNearby = a.nearbyCount;
-	int bNearby = b.nearbyCount;
-	int maxN = aNearby < bNearby ? bNearby : aNearby;
-	for (int k = 0; k < maxN; k++)
+	for(int i = 0; i < a.nearbyCount; i++)
 	{
-		if (aset && bset)
+		if(a.nearbyAgents[i] == j)
 		{
-			return;
-		}
-		if (k < aNearby && a.nearbyAgents[k] == j)
-		{
-			a.ux[k] = ux;
-			a.uy[k] = uy;
-			a.uConstraintReversed[k] = reversed;
-			aset = true;
-		}
-		if (k < bNearby && b.nearbyAgents[k] == i)
-		{
-			b.ux[k] = -ux;
-			b.uy[k] = -uy;
-			b.uConstraintReversed[k] = reversed;
-			bset = true;
+			a.ORCAA[i] = A;
+			a.ORCAB[i] = B;
+			a.ORCAC[i] = C;
+			break;
 		}
 	}
 }
@@ -151,7 +134,8 @@ void ORCASolver::SetParameters(float T)
 }
 
 
-void ORCASolver::computeSmallestChangeVectors(int i, int j)
+
+void ORCASolver::computeORCAConstraints(int i, int j)
 {
 	Agent& a = agents[i];
 	Agent& b = agents[j];
@@ -164,19 +148,12 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 	float Px, Py;
 	float Qx, Qy;
 
-	//should the constraint area be reversed (the other half plane is allowed)
-	bool reversed = false;
+	//v_opt is outside the VO
+	bool outside = false;
+	
 
-	//bool IntersectCircleCircle(float u1, float v1, float r1, float u2, float v2, float r2, float& x1, float& y1, float& x2, float& y2)
-
-
-	BMU::IntersectCircleCircle(ABx, ABy, R, Ox, Oy, sqrtf(Ox * Ox + Oy * Oy), Px, Py, Qx, Qy);
-
-	if (BMU::isnanf(Px) || BMU::isnanf(Py) || BMU::isnanf(Qx) || BMU::isnanf(Qy))
-	{
-
-		BMU::IntersectCircleCircle(ABx, ABy, R, Ox, Oy, sqrtf(Ox * Ox + Oy * Oy), Px, Py, Qx, Qy);
-	}
+	BMU::IntersectCircleCircle(ABx, ABy, R, 0, 0, sqrtf(ABx * ABx + ABy * ABy - R * R), Px, Py, Qx, Qy);
+	
 	UE_LOG(LogRVOTest, VeryVerbose, TEXT("computeSmallest, P( %f , %f )  Q( %f,  %f )"), Px, Py, Qx, Qy);
 
 	
@@ -187,21 +164,11 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 		std::swap(Py, Qy);
 	}
 
+	float Npx = Py;
+	float Npy = -Px;
 	
-	float Npx = -Py;
-	float Npy = Px;
-	if (Npx * Ox + Npy * Oy > 0)
-	{
-		Npx = -Npx;
-		Npy = -Npy;
-	}
 	float Nqx = -Qy;
 	float Nqy = Qx;
-	if (Nqx * Ox + Nqy * Oy > 0)
-	{
-		Nqx = -Nqx;
-		Nqy = -Nqy;
-	}
 
 	float Nplrec = 1.f / sqrtf(Npx * Npx + Npy * Npy);
 	float Nqlrec = 1.f / sqrtf(Nqx * Nqx + Nqy * Nqy);
@@ -214,10 +181,12 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 
 	//G, H points are not needed, but they are O's orthogonal projections to AP, and AQ (or the little circle's touching point)
 	//they are the 'g' and 'h' in variable names below: Aog, Aoh, ..
-
+	
+	//v^{opt}_A - v^{opt}_B which is vrel when v^{opt}_X = v_X for all X
 	float vrelx = a.vx - b.vx;
 	float vrely = a.vy - b.vy;
 
+	
 	//outside QAP angle area
 	
 	if (Npx * vrelx + Npy * vrely > 0 || Nqx * vrelx + Nqy * vrely > 0)
@@ -230,7 +199,7 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 			return;
 		}
 		reversed = true;*/
-		reversed = true;
+		outside = true;
 		
 	}
 
@@ -245,91 +214,87 @@ void ORCASolver::computeSmallestChangeVectors(int i, int j)
 	float Coh = Aoh * Ox + Boh * Oy;
 	
 
-	float Sx, Sy;
+	float Sx, Sy, Nx, Ny;
 	if (Aog * vrelx + Bog * vrely < Cog || Aoh * vrelx + Boh * vrely < Coh)
 	{
 		if (-ABy * vrelx + ABx * vrely > 0.f)
 		{
 			BMU::OrthogonalProjectionOfPointOnLine(Nqx, Nqy, 0.f, vrelx, vrely, Sx, Sy);
+			Nx = Nqx;
+			Ny = Nqy;
 		}
 		else
 		{
 			BMU::OrthogonalProjectionOfPointOnLine(Npx, Npy, 0.f, vrelx, vrely, Sx, Sy);
+			Nx = Npx;
+			Ny = Npy;
 		}
-	}
-	else if ((vrelx - Ox) * (vrelx - Ox) + (vrely - Oy) * (vrely - Oy) < r * r)
-	{
-		BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
 	}
 	else
 	{
-		/*SetUVector(i, j, 0.f, 0.f);
-		return;*/
-		/*BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
-		if ((vrelx - Sx) * (vrelx - Sx) + (vrely - Sy) * (vrely - Sy) > (a.maxAccMagnitude + b.maxAccMagnitude) * (a.maxAccMagnitude + b.maxAccMagnitude))
-		{
-			SetUVector(i, j, 0.f, 0.f);
-			return;
-		}
-		reversed = true;*/
 		BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
-		reversed = true;
+		Nx = Sx - Ox;
+		Ny = Sy - Oy;
+		outside = outside || ((vrelx - Ox) * (vrelx - Ox) + (vrely - Oy) * (vrely - Oy) > r * r);
 	}
-
-	SetUVector(i, j, Sx - vrelx, Sy - vrely, reversed);
+	float Nlrec = 1.f / sqrtf(Nx * Nx + Ny * Ny);
+	Nx *= Nlrec;
+	Ny *= Nlrec;
+	
+	float ux = Sx - vrelx;
+	float uy = Sy - vrely;
+	
+	if(!outside)
+	{
+		ux *= .5f;
+		uy *= .5f;
+	}
+	
+	SetORCAConstraint(a, j, -Nx, -Ny, -Nx * (a.vx + ux) - Ny * (a.vy + uy));
+	SetORCAConstraint(b, i, Nx, Ny, Nx * (b.vx - ux) + Ny * (b.vy - uy));
 }
 
 void ORCASolver::ComputeNewVelocities()
 {
 
 	for (int i = 0; i < num; i++)
-	{
-		for (int j = i + 1; j < num; j++)
+	{		
+		Agent& a = agents[i];
+		
+		for(int k = 0; k < a.nearbyCount; k++)
 		{
-			if (AreAgentsNeighbours(i, j))
+			int j = a.nearbyAgents[k];
+			//if i > j, then the orcalines should be calculated already
+			if(i < j)
 			{
-				computeSmallestChangeVectors(i, j);
+				computeORCAConstraints(i, j);
 			}
 		}
-		Agent& a = agents[i];
-		if (a.vx_pref * a.vx_pref + a.vy_pref * a.vy_pref < EPS)
+		
+		/*if (a.vx_pref * a.vx_pref + a.vy_pref * a.vy_pref < EPS)
 		{
 			a.vx_new = 0.f;
 			a.vy_new = 0.f;
 			continue;
-		}
+		}*/
+		
 		solver.Reset();
 		UE_LOG(LogRVOTest, VeryVerbose, TEXT("vxpref %f %f"), a.vx_pref, a.vy_pref);
 		solver.SetDestination(a.vx_pref, a.vy_pref);
 		for (int j = 0; j < a.nearbyCount; j++)
 		{
-			float ux = a.ux[j];
-			float uy = a.uy[j];
-			bool reversed = a.uConstraintReversed[j];
+			float A = a.ORCAA[j];
+			float B = a.ORCAB[j];
+			float C = a.ORCAC[j];
+			
 			//a.nearbyAgents[j] == i shouldn't happen but just to be safe
-			if ((fabs(ux) > EPS || fabs(uy) > EPS) && a.nearbyAgents[j] != i)
+			if(fabs(A) < EPS && fabs(B) < EPS || a.nearbyAgents[j] == i)
 			{
-				float A = reversed ? ux : -ux;
-				float B = reversed ? uy : -uy;
-				//point: V_a + u / 2, direction is -u, or u when reversed
-				
-				float C = A * (a.vx + ux * .5f) + B * (a.vy + uy * .5f);
-				if (reversed)
-				{
-					C = A * (a.vx + ux) + B * (a.vy + uy);
-				}
-
-				solver.AddConstraintLinear(A, B, C);
-				UE_LOG(LogRVOTest, VeryVerbose, TEXT("i, j: %d %d"), i, j);
-
-				UE_LOG(LogRVOTest, VeryVerbose, TEXT("lin constr ABC: %f %f %f"), A, B, C);
-				if (BMU::isnanf(A) || BMU::isnanf(B) || BMU::isnanf(C) || fabs(A) < EPS && fabs(B) < EPS)
-				{
-					UE_LOG(LogRVOTest, VeryVerbose, TEXT("lin constr ABC: %f %f %f"), A, B, C);
-					computeSmallestChangeVectors(i, a.nearbyAgents[j]);
-
-				}
+				continue;
 			}
+			
+			solver.AddConstraintLinear(A, B, C);
+			
 		}
 
 		

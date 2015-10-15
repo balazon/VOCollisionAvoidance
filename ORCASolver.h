@@ -23,9 +23,11 @@ struct Agent
 	float vx_new;
 	float vy_new;
 	int nearbyAgents[CA_MAXNEARBY];
-	float ux[CA_MAXNEARBY];
-	float uy[CA_MAXNEARBY];
-	bool uConstraintReversed[CA_MAXNEARBY];
+	
+	float ORCAA[CA_MAXNEARBY];
+	float ORCAB[CA_MAXNEARBY];
+	float ORCAC[CA_MAXNEARBY];
+	
 
 	int nearbyCount;
 
@@ -52,7 +54,9 @@ public:
 	void ClearNeighbours(int i);
 	void SetAgentsNearby(int i, int j);
 	bool AreAgentsNeighbours(int i, int j);
-	void SetUVector(int i, int j, float ux, float uy, bool reversed = false);
+	
+	
+	void SetORCAConstraint(Agent& a, int j, float A, float B, float C);
 
 	//void setAgentState(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref)
 
@@ -75,21 +79,14 @@ public:
 	void SetDebugging(bool on);
 private:
 
-	//used for calculating the limited VO (t < T)
+	//used for calculating the limited VO (t < T), otherwise known as tau
 	float T;
 
 	int num;
 	Agent agents[CA_MAXAGENTS];
-
-	//void computeORCAConstraint(float Ax, float Ay, float Bx, float By, float Vax, float Vay, float Vbx, float Vby, float Ra, float Rb)
-
-	//compute u vector: u for A agent with respect to B, and -u for agent B with respect to A
-	//void computeSmallestChangeRequired
-
 	
 
-	void computeSmallestChangeVectors(int i, int j);
-
+	void computeORCAConstraints(int i, int j);
 	
 };
 

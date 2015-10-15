@@ -8,7 +8,7 @@ width="800" height="600">
  cx="80.00000" cy="80.00000" r="40.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 80.0000 80.0000 160.0000 120.0000"  />
+ d="M 80.0000 80.0000 160.0000 140.0000"  />
 
 <circle stroke="black" stroke-width="1" fill="none" 
  cx="320.00000" cy="120.00000" r="40.00000"  />
@@ -26,6 +26,6 @@ width="800" height="600">
  cx="200.00000" cy="200.00000" r="40.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 240.0000 240.0000"  />
+ d="M 200.0000 200.0000 200.0000 200.0000"  />
 
 </svg>

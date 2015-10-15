@@ -5,24 +5,33 @@ xmlns="http://www.w3.org/2000/svg"
 width="800" height="600">
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 995.2712 -16.6576 -522.6221 489.3067"  />
+ d="M 999.2949 465.9616 -531.8136 1.5196"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 1007.9203 21.2897 995.2712 -16.6576 -522.6221 489.3067 -509.9730 527.2541"  />
+ d="M 996.9727 473.6171 999.2949 465.9616 -531.8137 1.5196 -534.1359 9.1751"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 1040.0000 240.0000 -560.0000 240.0000"  />
+ d="M 761.5433 761.5433 -369.8276 -369.8276"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 1040.0000 280.0000 1040.0000 240.0000 -560.0000 240.0000 -560.0000 280.0000"  />
-
-<circle stroke="black" stroke-width="1" fill="none" 
- cx="240.00000" cy="240.00000" r="8.00000"  />
-
-<circle stroke="black" stroke-width="1" fill="none" 
- cx="200.00000" cy="200.00000" r="120.00000"  />
+ d="M 755.8864 767.2002 761.5433 761.5433 -369.8275 -369.8275 -375.4844 -364.1707"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 280.0000 240.0000"  />
+ d="M -495.2048 -2.1497 1016.1316 523.0764"  />
+
+<path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
+ d="M -492.5787 -9.7064 -495.2048 -2.1497 1016.1315 523.0764 1018.7576 515.5197"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="200.00000" cy="200.00000" r="32.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="200.00000" cy="200.00000" r="200.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 200.0000 200.0000 200.0000 200.0000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 200.0000 200.0000 228.9512 186.3681"  />
 
 </svg>

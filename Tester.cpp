@@ -92,10 +92,11 @@ void Tester::InitTests()
 	
 	
 	//svgexport
-	Agent sa1 = Agent(2.f, 2.f, 2.f, 1.f, 1.f, 2.f, 1.f, 3.f, 0.2f);
-	Agent sa2 = Agent(8.f, 3.f, -1.f, .5f, 1.f, -2.f, 1.f, 3.f, 0.2f);
-	Agent sa3 = Agent(3.f, 9.f, 1.f, -2.f, 1.f, 1.f, -2.f, 3.f, 0.2f);
-	Agent sa4 = Agent(5.f, 5.f, 1.f, 1.f, 1.f, 2.f, 1.f, 3.f, 0.2f);
+	//Agent sa1 = Agent(2.f, 2.f, 2.f, 1.f, 1.f, 2.f, 1.f, 5.f, 0.8f);
+	Agent sa1 = Agent(2.f, 2.f, 2.f, 1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
+	Agent sa2 = Agent(8.f, 3.f, -1.f, .5f, 1.f, -2.f, 1.f, 5.f, 0.8f);
+	Agent sa3 = Agent(3.f, 9.f, 1.f, -2.f, 1.f, 1.f, -2.f, 5.f, 0.8f);
+	Agent sa4 = Agent(5.f, 5.f, 0.f, 0.f, 1.f, 0.f, 0.f, 5.f, 0.8f);
 	
 	testAgents.clear();
 	testAgents.push_back(sa1);

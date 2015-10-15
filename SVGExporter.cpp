@@ -41,27 +41,23 @@ int SVGExporter::writeUnitORCAs(std::string fileName, ORCASolver* solver, int nu
 	Agent& a = solver->GetAgent(agentID);
 	for(int i = 0; i < a.nearbyCount; i++)
 	{
-		bool rev = a.uConstraintReversed[i];
-		float ux = a.ux[i];
-		float uy = a.uy[i];
-		if(fabs(ux) < EPS && fabs(uy) < EPS)
-		{
-			continue;
-		}
-		float nx = rev ? ux : -ux;
-		float ny = rev ? uy : -uy;
-		float lrec = 1.f / sqrtf(nx * nx + ny * ny);
-		nx *= lrec;
-		ny *= lrec;
-		
-		exporter.writeHalfplane(a.x + a.vx + ux * .5f, a.y + a.vy + uy * .5f, nx, ny);
+		float A = a.ORCAA[i];
+		float B = a.ORCAB[i];
+		float C = a.ORCAC[i];
+		float tx, ty;
+		BMU::OrthogonalProjectionOfPointOnLine(A, B, C, a.x + a.vx, a.y + a.vy, tx, ty);
+		exporter.writeHalfplane(tx, ty, A, B);
 	}
 	exporter.writeCircle(a.x + a.vx, a.y + a.vy, a.maxAccMagnitude);
 	exporter.writeCircle(a.x, a.y, a.maxVelocityMagnitude);
 	
 	exporter.writeVector(a.x, a.y, a.vx_pref, a.vy_pref);
 	
+	exporter.writeVector(a.x, a.y, a.vx_new, a.vy_new);
+	
 	exporter.endSvg();
+	
+	
 	
 	return 0;
 }
@@ -130,7 +126,7 @@ void SVGExporter::writeHalfplane(float x, float y, float nx, float ny)
 	
 	std::string style{"style=\"fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412\""};
 	
-	float areawidth = 1.f;
+	float areawidth = .2f;
 	float areastartx = startx - nx * areawidth;
 	float areastarty = starty - ny * areawidth;
 	float areaendx = endx - nx * areawidth;

@@ -2,21 +2,25 @@
 
 #pragma once
 
-class LogRVOTest;
-//class VeryVerbose;
-//class Warning;
+//#define UE_BUILD
 
+#ifndef UE_BUILD
 
+	class LogRVOTest;
 
-#define VeryVerbose (4)
-#define Warning (5)
-#define LogLevel (5)
-#define TEXT(x) x
-#define UE_LOG(x, y, ...) if(y >= LogLevel) printf(__VA_ARGS__)
+	#define VeryVerbose (4)
+	#define Warning (5)
+	#define LogLevel (5)
+	#define TEXT(x) x
+	#define UE_LOG(x, y, ...) if(y >= LogLevel) printf(__VA_ARGS__)
+	#include <cstdio>
 
+#endif
 
+#ifdef UE_BUILD
+	#include "RVOTest.h"
+#endif
 
-#include <cstdio>
 #include <cmath>
 #include <utility>
 
