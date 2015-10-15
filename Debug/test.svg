@@ -14,7 +14,7 @@ width="800" height="600">
  cx="320.00000" cy="120.00000" r="40.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 320.0000 120.0000 280.0000 140.0000"  />
+ d="M 320.0000 120.0000 240.0000 240.0000"  />
 
 <circle stroke="black" stroke-width="1" fill="none" 
  cx="120.00000" cy="360.00000" r="40.00000"  />

@@ -77,6 +77,8 @@ public:
 	void ComputeNewVelocities();
 	
 	void SetDebugging(bool on);
+	
+	friend class Tester;
 private:
 
 	//used for calculating the limited VO (t < T), otherwise known as tau

@@ -47,7 +47,7 @@ void Tester::InitTests()
 	testAgents.push_back(b1);
 	
 	Test t1{testAgents, neighbours, 0, 4.75f, 2.f};
-	AddTest(t1);
+	//AddTest(t1);
 	
 	//test 2
 	Agent a2 = Agent{0.f, 0.f, 9.f, 4.f, 2.f, 9.f, 4.f, 1000.f, 100.f};
@@ -59,7 +59,7 @@ void Tester::InitTests()
 	testAgents.push_back(a2);
 	testAgents.push_back(b2);
 	Test t2{testAgents, neighbours, 0, 9.f, 2.f};
-	AddTest(t2);
+	//AddTest(t2);
 	
 	//test 3
 	Agent a3 = Agent{0.f, 0.f, 0.75f, -3.f, 2.f, 0.f, -6.f, 5.f, 100.f};
@@ -72,7 +72,7 @@ void Tester::InitTests()
 	testAgents.push_back(b3);
 	
 	Test t3{testAgents, neighbours, 0, 0.f, -5.f};
-	AddTest(t3);
+	//AddTest(t3);
 	
 	//continuous tests:
 	std::vector<float> DX, DY;
@@ -94,7 +94,7 @@ void Tester::InitTests()
 	//svgexport
 	//Agent sa1 = Agent(2.f, 2.f, 2.f, 1.f, 1.f, 2.f, 1.f, 5.f, 0.8f);
 	Agent sa1 = Agent(2.f, 2.f, 2.f, 1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
-	Agent sa2 = Agent(8.f, 3.f, -1.f, .5f, 1.f, -2.f, 1.f, 5.f, 0.8f);
+	Agent sa2 = Agent(8.f, 3.f, -2.f, 3.f, 1.f, -2.f, 1.f, 5.f, 0.8f);
 	Agent sa3 = Agent(3.f, 9.f, 1.f, -2.f, 1.f, 1.f, -2.f, 5.f, 0.8f);
 	Agent sa4 = Agent(5.f, 5.f, 0.f, 0.f, 1.f, 0.f, 0.f, 5.f, 0.8f);
 	
@@ -123,7 +123,7 @@ void Tester::InitTests()
 	RunTest(st);
 	SVGExporter::writeUnits("test.svg", &solver, 4);
 	SVGExporter::writeUnitORCAs("unitORCA.svg", &solver, 4, 3);
-	
+	//solver.computeORCAConstraints(0, 3);
 	
 }
 

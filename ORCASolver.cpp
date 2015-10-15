@@ -250,7 +250,14 @@ void ORCASolver::computeORCAConstraints(int i, int j)
 		uy *= .5f;
 	}
 	
+	float A1, B1, C1, A2, B2, C2;
+	A1 = -Nx; B1 = -Ny; C1 = -Nx * (a.vx + ux) - Ny * (a.vy + uy);
+	A2 = Nx; B2 = Ny; C2 = Nx * (b.vx - ux) + Ny * (b.vy - uy);
+	
+	UE_LOG(LogRVOTest, Warning, TEXT("ij: %d %d, \n  %.2f, %.2f, %.2f \n  %.2f, %.2f, %.2f\n\n"), i, j, A1, B1, C1, A2, B2, C2);
+	
 	SetORCAConstraint(a, j, -Nx, -Ny, -Nx * (a.vx + ux) - Ny * (a.vy + uy));
+	
 	SetORCAConstraint(b, i, Nx, Ny, Nx * (b.vx - ux) + Ny * (b.vy - uy));
 }
 
@@ -265,7 +272,8 @@ void ORCASolver::ComputeNewVelocities()
 		{
 			int j = a.nearbyAgents[k];
 			//if i > j, then the orcalines should be calculated already
-			if(i < j)
+			//if(i < j) TODO should work sometime
+			if(true)
 			{
 				computeORCAConstraints(i, j);
 			}

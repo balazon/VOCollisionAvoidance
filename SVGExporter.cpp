@@ -45,8 +45,8 @@ int SVGExporter::writeUnitORCAs(std::string fileName, ORCASolver* solver, int nu
 		float B = a.ORCAB[i];
 		float C = a.ORCAC[i];
 		float tx, ty;
-		BMU::OrthogonalProjectionOfPointOnLine(A, B, C, a.x + a.vx, a.y + a.vy, tx, ty);
-		exporter.writeHalfplane(tx, ty, A, B);
+		BMU::OrthogonalProjectionOfPointOnLine(A, B, C, a.vx, a.vy, tx, ty);
+		exporter.writeHalfplane(a.x + tx, a.y + ty, A, B);
 	}
 	exporter.writeCircle(a.x + a.vx, a.y + a.vy, a.maxAccMagnitude);
 	exporter.writeCircle(a.x, a.y, a.maxVelocityMagnitude);
@@ -56,6 +56,7 @@ int SVGExporter::writeUnitORCAs(std::string fileName, ORCASolver* solver, int nu
 	exporter.writeVector(a.x, a.y, a.vx_new, a.vy_new);
 	
 	exporter.endSvg();
+	
 	
 	
 	
@@ -117,12 +118,16 @@ void SVGExporter::writeHalfplane(float x, float y, float nx, float ny)
 	float rotNx = -ny;
 	float rotNy = nx;
 	
-	float length = 20.f;
+	float length = 10.f;
 	float startx = x + rotNx * length;
-	float starty = x + rotNy * length;
+	float starty = y + rotNy * length;
 	float endx = x - rotNx * length;
-	float endy = x - rotNy * length;
+	float endy = y - rotNy * length;
 	writeVector(startx, starty, endx - startx, endy - starty);
+	
+	writeVector(startx, starty, x - startx, y - starty);
+	writeVector(x, y, endx - x , endy - y);
+	writeVector(x, y, nx * .2f, ny * .2f);
 	
 	std::string style{"style=\"fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412\""};
 	
