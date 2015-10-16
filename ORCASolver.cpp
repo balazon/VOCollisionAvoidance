@@ -232,7 +232,11 @@ void ORCASolver::computeORCAConstraints(int i, int j)
 	}
 	else
 	{
-		BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
+		bool orth = BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, vrelx, vrely, Sx, Sy);
+		if(!orth)
+		{
+			orth = BMU::OrthogonalProjectionOfPointOnCircle(Ox, Oy, r, Ox + 2.f * Npx * EPS, Oy + 2.f * Npy * EPS, Sx, Sy);
+		}
 		Nx = Sx - Ox;
 		Ny = Sy - Oy;
 		outside = outside || ((vrelx - Ox) * (vrelx - Ox) + (vrely - Oy) * (vrely - Oy) > r * r);
@@ -254,7 +258,14 @@ void ORCASolver::computeORCAConstraints(int i, int j)
 	A1 = -Nx; B1 = -Ny; C1 = -Nx * (a.vx + ux) - Ny * (a.vy + uy);
 	A2 = Nx; B2 = Ny; C2 = Nx * (b.vx - ux) + Ny * (b.vy - uy);
 	
-	UE_LOG(LogRVOTest, Warning, TEXT("ij: %d %d, \n  %.2f, %.2f, %.2f \n  %.2f, %.2f, %.2f\n\n"), i, j, A1, B1, C1, A2, B2, C2);
+	UE_LOG(LogRVOTest, VeryVerbose, TEXT("ij: %d %d, \n  %.2f, %.2f, %.2f \n  %.2f, %.2f, %.2f\n"), i, j, A1, B1, C1, A2, B2, C2);
+	/*UE_LOG(LogRVOTest, Warning, TEXT("u: %.2f %.2f\n"), ux, uy);
+	UE_LOG(LogRVOTest, Warning, TEXT("a.v: %.2f %.2f\n"), a.vx, a.vy);
+	UE_LOG(LogRVOTest, Warning, TEXT("b.v: %.2f %.2f\n"), b.vx, b.vy);
+	UE_LOG(LogRVOTest, Warning, TEXT("a.v + u %.2f %.2f\n"), a.vx + ux, a.vy + uy);
+	UE_LOG(LogRVOTest, Warning, TEXT("b.v - u %.2f %.2f\n\n"), b.vx - ux, b.vy - uy);
+	*/
+	
 	
 	SetORCAConstraint(a, j, -Nx, -Ny, -Nx * (a.vx + ux) - Ny * (a.vy + uy));
 	
@@ -271,9 +282,8 @@ void ORCASolver::ComputeNewVelocities()
 		for(int k = 0; k < a.nearbyCount; k++)
 		{
 			int j = a.nearbyAgents[k];
-			//if i > j, then the orcalines should be calculated already
-			//if(i < j) TODO should work sometime
-			if(true)
+			
+			if(i < j)
 			{
 				computeORCAConstraints(i, j);
 			}

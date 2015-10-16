@@ -95,19 +95,21 @@ void Tester::InitTests()
 	//Agent sa1 = Agent(2.f, 2.f, 2.f, 1.f, 1.f, 2.f, 1.f, 5.f, 0.8f);
 	Agent sa1 = Agent(2.f, 2.f, 2.f, 1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
 	Agent sa2 = Agent(8.f, 3.f, -2.f, 3.f, 1.f, -2.f, 1.f, 5.f, 0.8f);
-	Agent sa3 = Agent(3.f, 9.f, 1.f, -2.f, 1.f, 1.f, -2.f, 5.f, 0.8f);
-	Agent sa4 = Agent(5.f, 5.f, 0.f, 0.f, 1.f, 0.f, 0.f, 5.f, 0.8f);
+	Agent sa3 = Agent(3.f, 9.f, 0.9f, -2.f, 1.f, 1.f, -2.f, 5.f, 0.8f);
+	Agent sa4 = Agent(5.f, 5.f, 0.f, 0.f, 1.f, 1.f, 0.f, 5.f, 0.8f);
+	Agent sa5 = Agent(7.f, 8.f, -2.f, -2.f, 1.f, 1.f, 0.f, 5.f, 0.8f);
 	
 	testAgents.clear();
 	testAgents.push_back(sa1);
 	testAgents.push_back(sa2);
 	testAgents.push_back(sa3);
 	testAgents.push_back(sa4);
+	testAgents.push_back(sa5);
 	
 	neighbours.clear();
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < testAgents.size(); i++)
 	{
-		for(int j = 0; j < 4; j++)
+		for(int j = 0; j < testAgents.size(); j++)
 		{
 			if(i == j)
 			{
@@ -121,9 +123,29 @@ void Tester::InitTests()
 	Test st{testAgents, neighbours, 3, 0.f, 0.f};
 	
 	RunTest(st);
-	SVGExporter::writeUnits("test.svg", &solver, 4);
-	SVGExporter::writeUnitORCAs("unitORCA.svg", &solver, 4, 3);
-	//solver.computeORCAConstraints(0, 3);
+	SVGExporter::writeUnits("unit01.svg", &solver, testAgents.size());
+	SVGExporter::writeUnitORCAs("unitORCA01.svg", &solver, testAgents.size(), 3);
+	
+	
+	Agent sa21 = Agent(2.f, 2.f, -2.f, -1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
+	Agent sa22 = Agent(8.f, 3.f, 2.f, -3.f, 1.f, -2.f, 1.f, 5.f, 0.8f);
+	Agent sa23 = Agent(3.f, 9.f, -0.9f, 2.f, 1.f, 1.f, -2.f, 5.f, 0.8f);
+	Agent sa24 = Agent(5.f, 5.f, 0.f, 0.f, 1.f, 1.f, 0.f, 5.f, 0.8f);
+	Agent sa25 = Agent(7.f, 8.f, 2.f, 2.f, 1.f, 1.f, 0.f, 5.f, 0.8f);
+	testAgents.clear();
+	testAgents.push_back(sa21);
+	testAgents.push_back(sa22);
+	testAgents.push_back(sa23);
+	testAgents.push_back(sa24);
+	testAgents.push_back(sa25);
+	
+	Test st2{testAgents, neighbours, 3, 0.f, 0.f};
+	
+	RunTest(st2);
+	SVGExporter::writeUnits("unit02.svg", &solver, testAgents.size());
+	SVGExporter::writeUnitORCAs("unitORCA02.svg", &solver, testAgents.size(), 3);
+	//solver.computeORCAConstraints(2, 3);
+	//solver.computeORCAConstraints(3, 2);
 	
 }
 

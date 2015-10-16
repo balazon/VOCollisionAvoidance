@@ -4,14 +4,11 @@
 xmlns="http://www.w3.org/2000/svg"
 width="800" height="600">
 
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="200.00000" cy="200.00000" r="2.00000"  />
+
 <path stroke="black" stroke-width="1" fill="none" 
  d="M 577.8142 332.4716 -187.7401 100.2506"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 577.8142 332.4716 195.0371 216.3611"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 195.0371 216.3611 -187.7401 100.2506"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
  d="M 195.0371 216.3611 197.3593 208.7055"  />
@@ -23,31 +20,28 @@ width="800" height="600">
  d="M 33.3728 563.9053 341.0651 -174.5563"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 33.3728 563.9053 187.2189 194.6745"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 187.2189 194.6745 341.0651 -174.5563"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
  d="M 187.2189 194.6745 194.6035 197.7515"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
  d="M 25.9881 560.8284 33.3728 563.9053 341.0651 -174.5562 333.6805 -177.6331"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 -200.0000 220.0000 600.0000"  />
+ d="M 218.0000 -200.0000 218.0000 600.0000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 -200.0000 220.0000 200.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 200.0000 220.0000 600.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 200.0000 212.0000 200.0000"  />
+ d="M 218.0000 200.0000 210.0000 200.0000"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 228.0000 -200.0000 220.0000 -200.0000 220.0000 600.0000 228.0000 600.0000"  />
+ d="M 226.0000 -200.0000 218.0000 -200.0000 218.0000 600.0000 226.0000 600.0000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M -160.9468 26.2722 577.5148 333.9645"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 208.2840 180.1183 205.2071 187.5030"  />
+
+<path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
+ d="M -157.8698 18.8876 -160.9468 26.2722 577.5148 333.9645 580.5917 326.5799"  />
 
 <circle stroke="black" stroke-width="1" fill="none" 
  cx="200.00000" cy="200.00000" r="32.00000"  />
@@ -56,9 +50,6 @@ width="800" height="600">
  cx="200.00000" cy="200.00000" r="200.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 200.0000 200.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 202.9982 201.0092"  />
+ d="M 200.0000 200.0000 198.5658 197.1228"  />
 
 </svg>

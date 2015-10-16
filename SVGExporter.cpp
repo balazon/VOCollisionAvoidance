@@ -15,11 +15,14 @@ int SVGExporter::writeUnits(std::string fileName, ORCASolver* solver, int num)
 	}
 	
 	exporter.startSvg(800, 600);
+	
+	
 	for(int i = 0; i < num; i++)
 	{
 		Agent& a = solver->GetAgent(i);
 		exporter.writeCircle(a.x, a.y, a.r);
 		exporter.writeVector(a.x, a.y, a.vx, a.vy);
+		exporter.writePoint(a.x, a.y);
 	}
 	
 	exporter.endSvg();
@@ -39,6 +42,9 @@ int SVGExporter::writeUnitORCAs(std::string fileName, ORCASolver* solver, int nu
 	exporter.startSvg(800, 600);
 	
 	Agent& a = solver->GetAgent(agentID);
+	
+	exporter.writePoint(a.x, a.y);
+	
 	for(int i = 0; i < a.nearbyCount; i++)
 	{
 		float A = a.ORCAA[i];
@@ -51,7 +57,7 @@ int SVGExporter::writeUnitORCAs(std::string fileName, ORCASolver* solver, int nu
 	exporter.writeCircle(a.x + a.vx, a.y + a.vy, a.maxAccMagnitude);
 	exporter.writeCircle(a.x, a.y, a.maxVelocityMagnitude);
 	
-	exporter.writeVector(a.x, a.y, a.vx_pref, a.vy_pref);
+	//exporter.writeVector(a.x, a.y, a.vx_pref, a.vy_pref);
 	
 	exporter.writeVector(a.x, a.y, a.vx_new, a.vy_new);
 	
@@ -92,12 +98,13 @@ void SVGExporter::endSvg()
 
 }
 
-void SVGExporter::writeCircle(float u, float v, float r)
+void SVGExporter::writeCircle(float u, float v, float r, std::string format)
 {
 	transform(u, v, u, v);
 	r *= scale;
+	
 	char buffer [150];
-	sprintf (buffer, "<circle stroke=\"black\" stroke-width=\"1\" fill=\"none\" \n cx=\"%.5f\" cy=\"%.5f\" r=\"%.5f\"  />\n", u, v, r);
+	sprintf (buffer, "<circle %s \n cx=\"%.5f\" cy=\"%.5f\" r=\"%.5f\"  />\n", format.c_str(), u, v, r);
 	writeOutLine(std::string{buffer});
 
 }
@@ -125,8 +132,7 @@ void SVGExporter::writeHalfplane(float x, float y, float nx, float ny)
 	float endy = y - rotNy * length;
 	writeVector(startx, starty, endx - startx, endy - starty);
 	
-	writeVector(startx, starty, x - startx, y - starty);
-	writeVector(x, y, endx - x , endy - y);
+	
 	writeVector(x, y, nx * .2f, ny * .2f);
 	
 	std::string style{"style=\"fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412\""};
@@ -152,5 +158,12 @@ void SVGExporter::transform(float x, float y, float& resX, float& resY)
 	
 	resX = x * scale + Ox;
 	resY = y * scale + Oy;
+
+}
+
+void SVGExporter::writePoint(float x, float y)
+{
+	std::string format{"stroke=\"none\" stroke-width=\"1\" fill=\"black\""};
+	writeCircle(x, y, 0.05f, format);
 
 }

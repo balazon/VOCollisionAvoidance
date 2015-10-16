@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg 
+xmlns="http://www.w3.org/2000/svg"
+width="800" height="600">
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="80.00000" cy="80.00000" r="40.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 80.0000 80.0000 0.0000 20.0000"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="80.00000" cy="80.00000" r="2.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="320.00000" cy="120.00000" r="40.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 320.0000 120.0000 400.0000 0.0000"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="320.00000" cy="120.00000" r="2.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="120.00000" cy="360.00000" r="40.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 120.0000 360.0000 84.0000 440.0000"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="120.00000" cy="360.00000" r="2.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="200.00000" cy="200.00000" r="40.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 200.0000 200.0000 200.0000 200.0000"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="200.00000" cy="200.00000" r="2.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="280.00000" cy="320.00000" r="40.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 280.0000 320.0000 360.0000 400.0000"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="280.00000" cy="320.00000" r="2.00000"  />
+
+</svg>

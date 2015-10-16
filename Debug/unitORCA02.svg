@@ -4,50 +4,44 @@
 xmlns="http://www.w3.org/2000/svg"
 width="800" height="600">
 
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 577.8142 332.4716 -187.7401 100.2506"  />
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="200.00000" cy="200.00000" r="2.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 577.8142 332.4716 195.0371 216.3611"  />
+ d="M 350.6868 -197.6710 -169.9463 409.7343"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 195.0371 216.3611 -187.7401 100.2506"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 195.0371 216.3611 197.3593 208.7055"  />
+ d="M 90.3703 106.0316 84.2962 100.8253"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 575.4920 340.1271 577.8142 332.4716 -187.7401 100.2506 -190.0623 107.9061"  />
+ d="M 356.7609 -192.4647 350.6868 -197.6710 -169.9463 409.7343 -163.8722 414.9406"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 33.3728 563.9053 341.0651 -174.5563"  />
+ d="M 614.6905 333.5049 12.6291 -193.2987"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 33.3728 563.9053 187.2189 194.6745"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 187.2189 194.6745 341.0651 -174.5563"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 187.2189 194.6745 194.6035 197.7515"  />
+ d="M 313.6598 70.1031 318.9279 64.0825"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 25.9881 560.8284 33.3728 563.9053 341.0651 -174.5562 333.6805 -177.6331"  />
+ d="M 609.4225 339.5255 614.6905 333.5049 12.6291 -193.2988 7.3611 -187.2782"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 -200.0000 220.0000 600.0000"  />
+ d="M -220.1487 152.2462 502.4733 495.4917"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 -200.0000 220.0000 200.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 200.0000 220.0000 600.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 220.0000 200.0000 212.0000 200.0000"  />
+ d="M 141.1623 323.8689 137.7298 331.0951"  />
 
 <path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
- d="M 228.0000 -200.0000 220.0000 -200.0000 220.0000 600.0000 228.0000 600.0000"  />
+ d="M -216.7163 145.0200 -220.1487 152.2462 502.4733 495.4916 505.9058 488.2654"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M -9.7343 569.9463 597.6710 49.3132"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 293.9684 309.6298 299.1747 315.7038"  />
+
+<path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
+ d="M -14.9406 563.8722 -9.7343 569.9463 597.6710 49.3132 592.4647 43.2391"  />
 
 <circle stroke="black" stroke-width="1" fill="none" 
  cx="200.00000" cy="200.00000" r="32.00000"  />
@@ -56,9 +50,6 @@ width="800" height="600">
  cx="200.00000" cy="200.00000" r="200.00000"  />
 
 <path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 200.0000 200.0000"  />
-
-<path stroke="black" stroke-width="1" fill="none" 
- d="M 200.0000 200.0000 202.9982 201.0092"  />
+ d="M 200.0000 200.0000 232.0000 200.0000"  />
 
 </svg>

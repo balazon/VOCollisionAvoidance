@@ -18,11 +18,13 @@ public:
 	
 	void endSvg();
 	
-	void writeCircle(float u, float v, float r);
+	void writeCircle(float u, float v, float r, std::string format = "stroke=\"black\" stroke-width=\"1\" fill=\"none\"");
 	
 	void writeVector(float x, float y, float dx, float dy);
 	
 	void writeHalfplane(float x, float y, float nx, float ny);
+	
+	void writePoint(float x, float y);
 	
 private:
 
