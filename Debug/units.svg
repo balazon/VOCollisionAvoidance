@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg 
+xmlns="http://www.w3.org/2000/svg"
+width="800" height="600">
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="320.80426" cy="250.48396" r="42.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 320.8043 250.4840 339.5427 260.2007"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="320.80426" cy="250.48396" r="3.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="479.19580" cy="250.48396" r="42.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 479.1958 250.4840 460.4574 260.2007"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="479.19580" cy="250.48396" r="3.00000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="400.00000" cy="384.42993" r="42.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 400.0000 384.4299 400.0000 363.3155"  />
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="400.00000" cy="384.42993" r="3.00000"  />
+
+</svg>

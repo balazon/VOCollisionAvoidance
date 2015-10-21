@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
-#define RVOTEST_API
 
+#define RVOTEST_API
 
 
 #include <vector>
@@ -37,6 +39,10 @@ public:
 	void SolveSafest(int failIndex, float& resX, float& resY);
 
 	bool debug;
+
+	bool usedSafest;
+
+	float usedDInSafest;
 private:
 	//destination coordinates
 	float u, v;

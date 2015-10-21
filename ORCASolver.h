@@ -1,10 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
-#define RVOTEST_API 
-
 #include <vector>
+
+#define RVOTEST_API 
 
 #define CA_MAXAGENTS (400)
 
@@ -23,11 +22,11 @@ struct Agent
 	float vx_new;
 	float vy_new;
 	int nearbyAgents[CA_MAXNEARBY];
-	
+
 	float ORCAA[CA_MAXNEARBY];
 	float ORCAB[CA_MAXNEARBY];
 	float ORCAC[CA_MAXNEARBY];
-	
+
 
 	int nearbyCount;
 
@@ -43,8 +42,8 @@ struct Agent
 
 
 /**
- * 
- */
+*
+*/
 class RVOTEST_API ORCASolver
 {
 public:
@@ -53,17 +52,19 @@ public:
 
 	void ClearNeighbours(int i);
 	void SetAgentsNearby(int i, int j);
-	bool AreAgentsNeighbours(int i, int j);
-	
-	
+
+	// is j a neighbour of i (true does not imply i is a neighbour of j)
+	bool IsAgentNeighbour(int i, int j);
+
+
 	void SetORCAConstraint(Agent& a, int j, float A, float B, float C);
 
 	//void setAgentState(float x, float y, float vx, float vy, float r, float vx_pref, float vy_pref)
 
-	
+
 	Agent& GetAgent(int id);
-	
-	
+
+
 
 	//returns id of agent
 	int AddAgent();
@@ -75,9 +76,9 @@ public:
 
 	//new velocities which hopefully help avoid collisions
 	void ComputeNewVelocities();
-	
+
 	void SetDebugging(bool on);
-	
+
 	friend class Tester;
 private:
 
@@ -86,10 +87,10 @@ private:
 
 	int num;
 	Agent agents[CA_MAXAGENTS];
-	
+
 
 	void computeORCAConstraints(int i, int j);
-	
+
 };
 
 

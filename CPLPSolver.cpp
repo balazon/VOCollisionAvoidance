@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+//#include "RVOTest.h"
 #include "CPLPSolver.h"
+
 
 
 
@@ -19,7 +20,7 @@ CPLPSolver::CPLPSolver() : debug{ false }, fixedElementsNum{0}
 	constraints.reserve(30);
 	constraintTypes.reserve(30);
 	order.reserve(30);
-
+	
 	
 }
 
@@ -37,7 +38,13 @@ void CPLPSolver::Reset()
 
 void CPLPSolver::AddConstraintLinear(float A, float B, float C, bool fixed)
 {
+	/*if (fabs(A) < EPS && fabs(B) < EPS || BMU::isnanf(A) || BMU::isnanf(B) || BMU::isnanf(C))
+	{
+		UE_LOG(LogRVOTest, Warning, TEXT("BAMM"));
+	}*/
 	float lrec = 1.f / sqrtf(A * A + B * B);
+	//UE_LOG(LogRVOTest, Warning, TEXT("addcl %f %f %f lrec: %f"), A, B, C, lrec);
+
 	constraints.reserve(constraints.size() + 3);
 	constraints.push_back(A * lrec);
 	constraints.push_back(B * lrec);
@@ -52,6 +59,20 @@ void CPLPSolver::AddConstraintLinear(float A, float B, float C, bool fixed)
 		std::swap_ranges(newPos, newPos + 3, oldPos);
 		std::swap(constraintTypes[fixedElementsNum], *constraintTypes.rbegin());
 		fixedElementsNum++;
+	}
+
+	int max = constraintTypes.size() > constraints.size() / 3 ? constraintTypes.size() : constraints.size() / 3;
+	for (int i = 0; i < max; i++)
+	{
+		int pos = i * 3;
+		float A = constraints[pos];
+		float B = constraints[pos + 1];
+		float C = constraints[pos + 2];
+
+		if (fabs(A) < EPS && fabs(B) < EPS)
+		{
+			UE_LOG(LogRVOTest, Warning, TEXT("BAMM AddConstraintLinear has it: %f %f %f"), A, B, C);
+		}
 	}
 }
 
@@ -277,7 +298,9 @@ void CPLPSolver::updatePointIfBetter(float x, float y, int n, float& resX, float
 
 void CPLPSolver::Solve(float& resX, float& resY)
 {
-	//printArray(constraints);
+	printArray(constraints);
+
+	usedSafest = false;
 
 	filter.clear();
 	createRandomOrder();
@@ -290,7 +313,7 @@ void CPLPSolver::Solve(float& resX, float& resY)
 	resX = u;
 	resY = v;
 
-	//printOrder(order);
+	printOrder(order);
 
 	if (debug)
 	{
@@ -476,6 +499,7 @@ void CPLPSolver::Solve(float& resX, float& resY)
 		if (!feasible)
 		{
 			SolveSafest(i, resX, resY);
+			feasible = true;
 			return;
 		}
 	}
@@ -486,6 +510,9 @@ void CPLPSolver::Solve(float& resX, float& resY)
 
 void CPLPSolver::SolveSafest(int failIndex, float& resX, float& resY)
 {
+	
+	usedSafest = true;
+
 	filter.clear();
 	
 
@@ -771,4 +798,5 @@ void CPLPSolver::SolveSafest(int failIndex, float& resX, float& resY)
 		}
 	}
 
+	usedDInSafest = d;
 }

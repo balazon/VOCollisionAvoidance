@@ -84,7 +84,7 @@ void Tester::InitTests()
 	testAgents.clear();
 	testAgents.push_back(a4);
 	testAgents.push_back(b4);
-	DX.clear();
+	DX.clear();DY.clear();
 	DX.push_back(-100.f); DY.push_back(5.f);
 	DX.push_back(100.f); DY.push_back(0.f);
 	ContinuousTest ct4{testAgents, neighbours, DX, DY, 4.f, 0};
@@ -122,10 +122,10 @@ void Tester::InitTests()
 	
 	Test st{testAgents, neighbours, 3, 0.f, 0.f};
 	
-	RunTest(st);
+	/*RunTest(st);
 	SVGExporter::writeUnits("unit01.svg", &solver, testAgents.size());
 	SVGExporter::writeUnitORCAs("unitORCA01.svg", &solver, testAgents.size(), 3);
-	
+	*/
 	
 	Agent sa21 = Agent(2.f, 2.f, -2.f, -1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
 	Agent sa22 = Agent(8.f, 3.f, 2.f, -3.f, 1.f, -2.f, 1.f, 5.f, 0.8f);
@@ -141,9 +141,35 @@ void Tester::InitTests()
 	
 	Test st2{testAgents, neighbours, 3, 0.f, 0.f};
 	
-	RunTest(st2);
-	SVGExporter::writeUnits("unit02.svg", &solver, testAgents.size());
+	/*RunTest(st2);
+	SVGExporter::writeUnits("C:/temp/unit02.svg", &solver, testAgents.size());
 	SVGExporter::writeUnitORCAs("unitORCA02.svg", &solver, testAgents.size(), 3);
+	*/
+	
+	//Agent sa31 = Agent(2.f, 2.f, -2.f, -1.5f, 1.f, 2.f, 1.f, 5.f, 0.8f);
+	
+	float sc=42.f;
+	Agent sa31 = Agent(sc * 2.f, sc * 2.f, 0.f, 0.f, sc * 1.f, 0.f, 0.f, 600.f, 2048.f);
+	Agent sa32 = Agent(sc * 7.f, sc * 2.f, 0.f, 0.f, sc * 1.f, 0.f, 0.f, 600.f, 2048.f);
+	Agent sa33 = Agent(sc * 4.5f, sc * 6.2f, 0.f, 0.f, sc * 1.f, 0.f, 0.f, 600.f, 2048.f);
+	
+	neighbours.clear();
+	neighbours.push_back({0, 1});neighbours.push_back({1, 0});
+	neighbours.push_back({0, 2});neighbours.push_back({2, 0});
+	neighbours.push_back({1, 2});neighbours.push_back({2, 1});
+	
+	testAgents.clear();
+	testAgents.push_back(sa31);
+	testAgents.push_back(sa32);
+	testAgents.push_back(sa33);
+	DX.clear();DY.clear();
+	DX.push_back(sc * 7.f); DY.push_back(sc * 5.f);
+	DX.push_back(sc * 2.f); DY.push_back(sc * 5.f);
+	DX.push_back(sc * 4.5f); DY.push_back(sc * .8f);
+	ContinuousTest ctcplp{testAgents, neighbours, DX, DY, 20.f, 0};
+	
+	RunContinuousTest(ctcplp);
+	
 	//solver.computeORCAConstraints(2, 3);
 	//solver.computeORCAConstraints(3, 2);
 	
@@ -250,23 +276,8 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 	{
 		agentIds.push_back(solver.AddAgent());
 		Agent a = t.agents[i];
-		
-		float toDestX = t.DestX[i] - a.x;
-		float toDestY = t.DestY[i] - a.y;
-		float destLength = sqrtf(toDestX * toDestX + toDestY * toDestY);
-		if (destLength < 10.f)
-		{
-			a.vx_pref = 0.f;
-			a.vy_pref = 0.f;
-		}
-		else
-		{
-			float recLength = 1.f / destLength;
-			toDestX *= recLength;
-			toDestY *= recLength;
-			a.vx_pref = toDestX * 100.f;
-			a.vy_pref = toDestY * 100.f;
-		}
+	
+		calcPreferredVelocity(a, t.DestX[i], t.DestY[i]);
 		
 		a.maxAccMagnitude = a.maxAccMagnitude * dt;
 		
@@ -288,45 +299,45 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 	while(timeGiven > 0)
 	{
 		timeGiven -= dt;
-		
 		debugTimer -= dt;
+		
+		solver.ComputeNewVelocities();
+		
 		if(debugTimer < 0)
 		{
 			debugTimer = debugInterval;
+			
+			char buffer[5];
+			sprintf(buffer, "%.1f", timeGiven);
+			std::string stime{buffer};
+			SVGExporter::writeUnits("units.svg", &solver, solver.num);
+			
 			for(int i = 0; i < t.agents.size(); i++)
 			{
 				Agent& a = solver.GetAgent(i);
 				std::cout << "Agent " << i << " x: " << a.x << ", y: " << a.y << " vx: " << a.vx << ", vy: " << a.vy << "\n";
+				
+				sprintf(buffer, "%d", i);
+				std::string sid{buffer};
+				
+				SVGExporter::writeUnitORCAs("unitORCA" + sid + ".svg", &solver, solver.num, i);
 			}
+			
+			std::cout << "svg done\n";
 		}
 		
-		
-		solver.ComputeNewVelocities();
 		for(int i = 0; i < t.agents.size(); i++)
 		{
 			Agent& a = solver.GetAgent(i);
 			
-			float toDestX = t.DestX[i] - a.x;
-			float toDestY = t.DestY[i] - a.y;
-			float destLength = sqrtf(toDestX * toDestX + toDestY * toDestY);
-			if (destLength < 10.f)
-			{
-				a.vx_pref = 0.f;
-				a.vy_pref = 0.f;
-			}
-			else
-			{
-				float recLength = 1.f / destLength;
-				toDestX *= recLength;
-				toDestY *= recLength;
-				a.vx_pref = toDestX * 100.f;
-				a.vy_pref = toDestY * 100.f;
-			}
+			calcPreferredVelocity(a, t.DestX[i], t.DestY[i]);
+			
 			a.vx = a.vx_new;
 			a.vy = a.vy_new;
 			a.x = a.x + a.vx * dt;
 			a.y = a.y + a.vy * dt;
 		}
+		
 	}
 	
 	int testAgentId = agentIds[t.testedAgent];
@@ -336,4 +347,41 @@ bool Tester::RunContinuousTest(ContinuousTest t)
 		return true;
 	else
 		return false;
+}
+
+
+void Tester::calcPreferredVelocity(Agent& a, float DX, float DY)
+{
+	float toDestX = DX - a.x;
+	float toDestY = DY - a.y;
+	float sqrDist = toDestX * toDestX + toDestY * toDestY;
+	
+	float AcceptanceSquared = 400.f;
+	float SlowdownSquared = 10000.f;
+	float MaxVelocity = a.maxVelocityMagnitude;
+	
+	if (sqrDist < AcceptanceSquared)
+	{
+		a.vx_pref = 0.f;
+		a.vy_pref = 0.f;
+	}
+	else
+	{
+		float m = 1.f / (SlowdownSquared - AcceptanceSquared);
+		float b = -m * AcceptanceSquared;
+		float k = sqrDist < SlowdownSquared ? sqrDist * m + b : 1.f;
+		if(k < EPS)
+		{
+			a.vx_pref = 0.f;
+			a.vy_pref = 0.f;
+		}
+		else
+		{
+			float lrec = 1.f / sqrtf(sqrDist);
+			a.vx_pref = toDestX * lrec * MaxVelocity * k;
+			a.vy_pref = toDestY * lrec * MaxVelocity * k;
+			
+		}
+	}
+
 }

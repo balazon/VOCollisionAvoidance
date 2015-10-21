@@ -46,6 +46,8 @@ public:
 	
 private:
 	
+	void calcPreferredVelocity(Agent& a, float DX, float DY);
+	
 	std::vector<Test> tests;
 	
 	std::vector<ContinuousTest> contTests;

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg 
+xmlns="http://www.w3.org/2000/svg"
+width="800" height="600">
+
+<circle stroke="none" stroke-width="1" fill="black" 
+ cx="400.00000" cy="300.00000" r="3.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 418.5977 1309.7167 418.5981 -690.2833"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 418.5979 309.7167 438.5979 309.7167"  />
+
+<path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
+ d="M 398.5977 1309.7167 418.5977 1309.7167 418.5981 -690.2833 398.5981 -690.2833"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M -447.4277 809.4730 1284.7693 -190.2738"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 418.6708 309.5996 428.6683 326.9215"  />
+
+<path style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.23529412" 
+ d="M -457.4252 792.1511 -447.4277 809.4730 1284.7693 -190.2738 1274.7717 -207.5958"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="418.73840" cy="309.71674" r="30.72000"  />
+
+<circle stroke="black" stroke-width="1" fill="none" 
+ cx="400.00000" cy="300.00000" r="600.00000"  />
+
+<circle stroke="none" stroke-width="1" fill="blue" 
+ cx="912.06049" cy="612.72040" r="3.00000"  />
+
+<circle stroke="none" stroke-width="1" fill="green" 
+ cx="418.59790" cy="309.64166" r="3.00000"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 400.0000 300.0000 912.0605 612.7204"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 400.0000 300.0000 418.5979 309.6417"  />
+
+<path stroke="black" stroke-width="1" fill="none" 
+ d="M 418.7384 309.7167 418.5979 309.6417"  />
+
+</svg>
